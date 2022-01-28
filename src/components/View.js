@@ -1,48 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import axiosWithAuth from '../utils/axiosWithAuth';
 
 import Article from './Article';
 import EditForm from './EditForm';
 
 const View = (props) => {
-    const [articles, setArticles] = useState([]);
-    const [editing, setEditing] = useState(false);
-    const [editId, setEditId] = useState();
+  const [articles, setArticles] = useState([]);
+  const [editing, setEditing] = useState(false);
+  const [editId, setEditId] = useState();
 
-    const handleDelete = (id) => {
-    }
+  useEffect(() => {
+    axiosWithAuth()
+      .get('/articles')
+      .then((response) => {
+        setArticles(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
 
-    const handleEdit = (article) => {
-    }
+  const handleDelete = (id) => {
+    axiosWithAuth()
+      .delete(`/articles/${id}`)
+      .then(() => {
+        const newArticles = articles.filter((article) => {
+          return article.id !== id;
+        });
+        setArticles(newArticles);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-    const handleEditSelect = (id)=> {
-        setEditing(true);
-        setEditId(id);
-    }
+  const handleEdit = (article) => {};
 
-    const handleEditCancel = ()=>{
-        setEditing(false);
-    }
+  const handleEditSelect = (id) => {
+    setEditing(true);
+    setEditId(id);
+  };
 
-    return(<ComponentContainer>
-        <HeaderContainer>View Articles</HeaderContainer>
-        <ContentContainer flexDirection="row">
-            <ArticleContainer>
-                {
-                    articles.map(article => {
-                        return <ArticleDivider key={article.id}>
-                            <Article key={article.id} article={article} handleDelete={handleDelete} handleEditSelect={handleEditSelect}/>
-                        </ArticleDivider>
-                    })
-                }
-            </ArticleContainer>
-            
-            {
-                editing && <EditForm editId={editId} handleEdit={handleEdit} handleEditCancel={handleEditCancel}/>
-            }
-        </ContentContainer>
-    </ComponentContainer>);
-}
+  const handleEditCancel = () => {
+    setEditing(false);
+  };
+
+  return (
+    <ComponentContainer>
+      <HeaderContainer>View Articles</HeaderContainer>
+      <ContentContainer flexDirection='row'>
+        <ArticleContainer>
+          {articles.map((article) => {
+            return (
+              <ArticleDivider key={article.id}>
+                <Article
+                  key={article.id}
+                  article={article}
+                  handleDelete={handleDelete}
+                  handleEditSelect={handleEditSelect}
+                />
+              </ArticleDivider>
+            );
+          })}
+        </ArticleContainer>
+
+        {editing && (
+          <EditForm
+            editId={editId}
+            handleEdit={handleEdit}
+            handleEditCancel={handleEditCancel}
+          />
+        )}
+      </ContentContainer>
+    </ComponentContainer>
+  );
+};
 
 export default View;
 
@@ -52,37 +86,35 @@ export default View;
 //3. Complete handleDelete method. It should make a request that delete the article with the included id.
 //4. Complete handleEdit method. It should make a request that updates the article that matches the included article param.
 
-
 const Container = styled.div`
-    padding: 0.5em;
-`
+  padding: 0.5em;
+`;
 const HeaderContainer = styled.h1`
-    border-bottom: solid black 2px;
-    padding: 1em;
-    margin:0;
-    font-size: 1.5em;
-    background: black;
-    color: white;
-`
+  border-bottom: solid black 2px;
+  padding: 1em;
+  margin: 0;
+  font-size: 1.5em;
+  background: black;
+  color: white;
+`;
 
 const ArticleDivider = styled.div`
-    border-bottom: 1px solid black;
-    padding: 1em;
-`
+  border-bottom: 1px solid black;
+  padding: 1em;
+`;
 
 const ComponentContainer = styled.div`
-    display:flex;
-    width: 80%;
-    flex-direction: column;
-    justify-content: center;
-    
-`
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  justify-content: center;
+`;
 
 const ContentContainer = styled.div`
-    display: flex;
-    flex-direction: ${props => props.flexDirection};
-`
+  display: flex;
+  flex-direction: ${(props) => props.flexDirection};
+`;
 
 const ArticleContainer = styled.div`
-    background: grey;
+  background: grey;
 `;
