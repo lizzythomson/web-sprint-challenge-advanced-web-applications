@@ -8,7 +8,10 @@ import Login from './Login';
 import View from './View';
 import Logout from './Logout';
 
+import PrivateRoute from './PrivateRoute';
+
 const App = () => {
+  const isLoggedIn = localStorage.getItem('token');
   return (
     <AppContainer>
       <BloomHeader />
@@ -20,12 +23,16 @@ const App = () => {
         <Route exact path='/login'>
           <Login />
         </Route>
-        <Route path='/view'>
-          <View />
-        </Route>
-        <Route path='/logout'>
-          <Logout />
-        </Route>
+        <PrivateRoute
+          path='/view'
+          component={View}
+          redirectTo='/login'
+        ></PrivateRoute>
+        <PrivateRoute
+          path='/logout'
+          component={Logout}
+          redirectTo='/login'
+        ></PrivateRoute>
       </RouteContainer>
     </AppContainer>
   );

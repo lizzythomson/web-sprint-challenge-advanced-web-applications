@@ -30,15 +30,14 @@ const Login = () => {
       .post('http://localhost:5000/api/login', newLogin)
       .then((response) => {
         localStorage.setItem('token', response.data.token);
+        setError('');
         history.push('/view');
       })
       .catch((error) => {
         console.log(error);
+        setError('Login failed. Please try again later');
       });
   };
-
-  //   TODO
-  const errorMessage = {};
 
   return (
     <ComponentContainer>
@@ -62,7 +61,7 @@ const Login = () => {
               id='password'
               name='password'
             ></input>
-            <p id='error'>Error Message</p>
+            <p id='error'>{error}</p>
             <div>
               <button>SUBMIT</button>
             </div>
