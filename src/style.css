@@ -1,12 +1,21 @@
 @import url(https://fonts.googleapis.com/css?family=Lato);
 
-html, body, #root {
-    margin: 0px;
-    height: 100%;
-    background: #eeeeee;
-    font-family: "Lato";
+html,
+body,
+#root {
+  margin: 0px;
+  height: 100%;
+  background: #eeeeee;
+  font-family: 'Lato';
 }
 
 label {
-    display:block;
+  display: block;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 }
