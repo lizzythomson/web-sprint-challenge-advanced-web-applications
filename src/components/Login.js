@@ -44,7 +44,7 @@ const Login = () => {
       <ModalContainer>
         <h1>Welcome to Blogger Pro</h1>
         <div className='form-container'>
-          <form id='submit' onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <label htmlFor='username'>Username:</label>
             <input
               type='text'
@@ -63,7 +63,7 @@ const Login = () => {
             ></input>
             <p id='error'>{error}</p>
             <div>
-              <button>SUBMIT</button>
+              <button id='submit'>SUBMIT</button>
             </div>
           </form>
         </div>
